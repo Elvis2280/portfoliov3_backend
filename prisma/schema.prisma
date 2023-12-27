@@ -1,0 +1,47 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model blog_articles {
+  id          Int       @id @default(autoincrement())
+  title       String?
+  description String?
+  content     String?
+  created_at  DateTime? @default(now()) @db.Timestamp(6)
+  owner       String
+}
+
+model blog_tags {
+  id      Int @id @default(autoincrement())
+  blog_id Int
+  tag_id  Int
+}
+
+model project_tags {
+  id         Int  @id(map: "projec_tags_pkey") @default(autoincrement())
+  project_id Int?
+  tag_id     Int?
+}
+
+model projects {
+  id Int @id @default(autoincrement())
+
+  title        String    @unique(map: "title_set")
+  description  String
+  content      String
+  img_portada  String
+  project_link String
+  created_at   DateTime? @default(now()) @db.Timestamp(6)
+  owner        String
+}
+
+model tags {
+  id   Int    @id @default(autoincrement())
+  name String @unique(map: "name_key")
+}
